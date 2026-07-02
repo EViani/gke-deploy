@@ -1,12 +1,12 @@
 name: 'Terraform GKE Destroy'
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - terraform
     paths:
       - 'infra/destroy/**'
+  workflow_dispatch:
   
 permissions:
   contents: read
