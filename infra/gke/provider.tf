@@ -6,7 +6,7 @@ terraform {
     }
   }
    backend "gcs" {
-    bucket = "bucket-gamarillo"
+    bucket = var.bucket_gcp
     prefix = "terraform/state"
   }
 
