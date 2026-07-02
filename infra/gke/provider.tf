@@ -6,13 +6,12 @@ terraform {
     }
   }
    backend "gcs" {
-    bucket = var.bucket_gcp
     prefix = "terraform/state"
   }
 
 }
 
 provider "google" {
-  project = var.project_id #"proyectosdypp2026"
+  project = var.project_id
   region  = "us-central1"
 }

@@ -42,9 +42,9 @@ jobs:
 
     # 4. Inicializar Terraform (descarga providers y configura backend)
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="bucket=${{ secrets.GCP_BUCKET_ID }}"
 
     # 7. Aplicar cambios (solo en la rama principal 'terraform')
     - name: Terraform Apply
       if: github.ref == 'refs/heads/terraform' && github.event_name == 'push'
-      run: terraform destroy -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="bucket_gcp=${{secrets.GCP_BUCKET_ID}}"
+      run: terraform destroy -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"

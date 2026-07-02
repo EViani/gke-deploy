@@ -49,7 +49,7 @@ jobs:
 
     # 4. Inicializar Terraform (descarga providers y configura backend)
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="bucket=${{ secrets.GCP_BUCKET_ID }}"
 
     # 5. Validar sintaxis de los manifiestos
     - name: Terraform Validate
@@ -57,9 +57,9 @@ jobs:
 
     # 6. Generar plan de ejecución
     - name: Terraform Plan
-      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="bucket_gcp=${{secrets.GCP_BUCKET_ID}}"
+      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" 
 
     # 7. Aplicar cambios (solo en la rama 'terraform')
     - name: Terraform Apply
       if: github.ref == 'refs/heads/terraform' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="bucket_gcp=${{secrets.GCP_BUCKET_ID}}"
+      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" 
