@@ -1,0 +1,4 @@
+project_id    = "PROJECT_ID"
+bucket_gcp = "BUCKET_NAME"
+region        = "us-central1"
+zone          = "us-central1-a"

@@ -1,0 +1,60 @@
+name: 'Terraform GKE Deployment'
+
+on:
+  push:
+    branches:
+      - terraform
+    paths-ignore:
+      - infra/destroy/**
+  pull_request:
+    branches:
+      - terraform
+    paths-ignore:
+      - infra/destroy/**
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform-bucket:
+    name: 'Terraform Bucket Store'
+    runs-on: ubuntu-latest
+    
+    # Define el directorio de trabajo donde residen los manifiestos
+    defaults:
+      run:
+        working-directory: ./infra/bucket
+
+    steps:
+       # 1. Checkout del código fuente
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Autenticación en GCP vía OIDC (Workload Identity)
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    # 3. Configurar el CLI de Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.7.0 # Especificar la versión requerida
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/terraform' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
