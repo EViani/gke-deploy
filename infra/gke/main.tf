@@ -11,7 +11,7 @@ resource "google_project_service" "artifact_registry" {
 # ── Artifact Registry repository ──────────────────────────────────────────────
 # Where the Docker images are stored inside GCP.
 resource "google_artifact_registry_repository" "k8s_apps" {
-  location      = "us-central-1"
+  location      = "us-central1"
   repository_id = "k8s-apps"
   format        = "DOCKER"
 

@@ -19,3 +19,4 @@ Como action no elimina el bucket este debe ser creado y eliminado manualmente, p
 tofu destroy
 ~~~
 
+El action creara el cluster en GKE y los recursos necesarios para el despliegue de la imagen, por lo que no es necesario ejecutar `tofu apply` para crear el cluster, solo es necesario ejecutar `tofu apply` para crear el bucket de GCS. Y hacer un push en el directorio `infra` para que el action cree el cluster en GKE y los recursos necesarios para el despliegue de la imagen.
