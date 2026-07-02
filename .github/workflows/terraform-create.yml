@@ -55,11 +55,11 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
-      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="bucket_gcp=${{secrets.GCP_BUCKET_ID}}"
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/terraform' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="bucket_gcp=${{secrets.GCP_BUCKET_ID}}"
 
   terraform:
     name: 'Terraform terraform Infra'
@@ -99,9 +99,9 @@ jobs:
 
     # 6. Generar plan de ejecución
     - name: Terraform Plan
-      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="bucket_gcp=${{secrets.GCP_BUCKET_ID}}"
 
     # 7. Aplicar cambios (solo en la rama 'terraform')
     - name: Terraform Apply
       if: github.ref == 'refs/heads/terraform' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="bucket_gcp=${{secrets.GCP_BUCKET_ID}}"
