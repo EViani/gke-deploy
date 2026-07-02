@@ -60,3 +60,48 @@ jobs:
     - name: Terraform Apply
       if: github.ref == 'refs/heads/terraform' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+
+  terraform:
+    name: 'Terraform terraform Infra'
+    needs: terraform-bucket
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './infra/gke'
+
+    steps:
+    # 1. Checkout del código fuente
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Autenticación en GCP vía OIDC (Workload Identity)
+    - name: Authenticate to Google Cloud
+      id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    # 3. Configurar el CLI de Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.7.0 # Especificar la versión requerida
+
+    # 4. Inicializar Terraform (descarga providers y configura backend)
+    - name: Terraform Init
+      run: terraform init
+
+    # 5. Validar sintaxis de los manifiestos
+    - name: Terraform Validate
+      run: terraform validate
+
+    # 6. Generar plan de ejecución
+    - name: Terraform Plan
+      run: terraform plan -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+
+    # 7. Aplicar cambios (solo en la rama 'terraform')
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/terraform' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
