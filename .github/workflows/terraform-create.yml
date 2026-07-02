@@ -4,13 +4,15 @@ on:
   push:
     branches:
       - terraform
-    paths-ignore:
-      - infra/destroy/**
+    paths:
+      - 'infra/**'
+      - '!infra/destroy/**'
   pull_request:
     branches:
       - terraform
-    paths-ignore:
-      - infra/destroy/**
+    paths:
+      - 'infra/**'
+      - '!infra/destroy/**'
 
 permissions:
   contents: read
@@ -24,7 +26,7 @@ jobs:
     # Define el directorio de trabajo donde residen los manifiestos
     defaults:
       run:
-        working-directory: ./infra/bucket
+        working-directory: './infra/bucket'
 
     steps:
        # 1. Checkout del código fuente

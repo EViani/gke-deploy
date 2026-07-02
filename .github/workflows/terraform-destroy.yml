@@ -6,7 +6,7 @@ on:
     branches:
       - terraform
     paths:
-      - infra/destroy/**
+      - 'infra/destroy/**'
   
 permissions:
   contents: read
@@ -21,7 +21,7 @@ jobs:
     # Define el directorio de trabajo donde residen los manifiestos
     defaults:
       run:
-        working-directory: ./infra/bucket
+        working-directory: './infra/bucket'
 
     steps:
        # 1. Checkout del código fuente
