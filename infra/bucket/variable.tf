@@ -18,5 +18,4 @@ variable "zone" {
 variable "bucket_gcp" {
   description = "Name of bucket in GCP"
   type        = string
-  default = "bucket-ev112"
 }
