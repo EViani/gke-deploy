@@ -4,10 +4,8 @@ on:
     push:
         branches: [main]
         paths:
-          - "!infra/**" 
-          - "!frontend/**"
           - "apps/**"
-
+    
 env:
     REGISTRY: us-central1-docker.pkg.dev
     IMAGE_NAME: ${{secrets.GCP_PROJECT_ID}}/k8s-apps/users-api
@@ -19,6 +17,9 @@ jobs:
     build-and-push:
         name: Build and publish Docker Image
         runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: './apps'
 
         permissions:
           contents: read
@@ -35,6 +36,7 @@ jobs:
               uses: google-github-actions/auth@v2
               with:
                 token_format: 'access_token'
+                project_id: ${{secrets.GCP_PROJECT_ID}}
                 workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
                 service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
@@ -78,10 +80,10 @@ jobs:
 
             - name: Update K8s Manifiest
               run: | 
-               yq -i '.spec.template.containers.image = "${{steps.outputs.meta.images}}:${{steps.outputs.tags.sha}}"' k8s/deployment.yml
+               yq -i '.spec.template.containers.image = "${{steps.meta.outputs.images}}:${{steps.meta.outputs.tags.sha}}"' k8s/deployment.yml
                git config --local user.name "Github Actions"
                git config --local user.email "actions@github.com"
                git add k8s/deployment
-               git commit -m "Update image to $IMAGE_NAME:${{steps.outputs.tags.sha}}" || echo "No changes to commit"
+               git commit -m "Update image to $IMAGE_NAME:${{steps.meta.outputs.tags.sha}}" || echo "No changes to commit"
                git pull --rebase origin main
                git push origin main
