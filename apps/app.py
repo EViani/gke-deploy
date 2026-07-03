@@ -17,4 +17,4 @@ def update_data():
 
 @app.get("/name")
 def get_name():
-    return {"name":"EViani","repo":"??"}
+    return {"name":"EViani","repo":"gke"}
