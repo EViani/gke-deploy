@@ -36,6 +36,7 @@ jobs:
               id: auth
               uses: google-github-actions/auth@v2
               with:
+                token_format: access_token
                 project_id: ${{secrets.GCP_PROJECT_ID}}
                 workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
                 service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
@@ -48,7 +49,7 @@ jobs:
               uses: docker/login-action@v3
               with:
                 registry: ${{env.REGISTRY}}
-                username: 'oauth2accesstoken' 
+                username: oauth2accesstoken 
                 password: ${{ steps.auth.outputs.access_token }} 
             
             
