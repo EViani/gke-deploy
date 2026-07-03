@@ -20,3 +20,9 @@ tofu destroy
 ~~~
 
 El action creara el cluster en GKE y los recursos necesarios para el despliegue de la imagen, por lo que no es necesario ejecutar `tofu apply` para crear el cluster, solo es necesario ejecutar `tofu apply` para crear el bucket de GCS. Y hacer un push en el directorio `infra` para que el action cree el cluster en GKE y los recursos necesarios para el despliegue de la imagen.
+
+No olvide los secrets necesarios:
+- `GCP_PROJECT_ID`: ID del proyecto de GCP
+- `GCP_BUCKET_ID:` Nombre del bucket de GCS creado para almacenar el state de Terraform
+- `GCP_SERVICE_ACCOUNT`: Cuenta creada con los permisos WIF
+- `GCP_WORKLOAD_IDENTITY_PROVIDER`: Nombre del proveedor de identidad de Workload Identity creado en GCP
