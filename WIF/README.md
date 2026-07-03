@@ -43,7 +43,7 @@ gcloud iam workload-identity-pools providers create-oidc "github-provider" \
     --workload-identity-pool="github-actions-pool" \
     --display-name="GitHub Provider" \
     --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
-    --attribute-condition="assertion.repository == 'REPO_USER/REPO_NAME'" \
+    --attribute-condition="assertion.repository == 'REPO_OWNER/REPO_NAME'" \
     --issuer-uri="https://token.actions.githubusercontent.com"
 
 # 4. Permitir que el repositorio de GitHub asuma la Cuenta de Servicio dedicada a Terraform

@@ -4,6 +4,9 @@ Pasos para crear un cluster en GKE con Terraform, creación y subida de imagen D
 ## Requisitos
 - Cuenta en [Google Cloud Platform](https://cloud.google.com/)
   - Con proyecto y billing habilitado
+  - APIs habilitadas:
+    - Kubernetes Engine API
+    - Cloud Resource Manager API
 - CLI [gcloud](https://cloud.google.com/sdk/docs/install)
 - Terraform instalado | [Opentofu](https://opentofu.org/)
 - [Docker](https://www.docker.com/get-docker) instalado
@@ -47,3 +50,10 @@ gcloud auth application-default set-quota-project <TU_PROJECT_ID>
 
 ### Workload Identity Federation (WIF) 
 Crear service account, y WIF para Terraform, para que pueda desplegar en GCP desde GitHub Actions sin necesidad de almacenar credenciales en el repositorio. [Workload Identity Federation](./WIF/README.md)
+
+### Infraestructura de GKE con Terraform
+Pasar a rama `terraform` y ejecutar los siguientes comandos para crear el cluster en GKE y los recursos necesarios para el despliegue de la imagen. [Infraestructura de GKE con Terraform](./infra/README.md)
+~~~ bash
+git switch terraform
+# Comprendase el uso de terraform o tofu como el mismo comando, ya que Opentofu es un fork de Terraform.
+~~~

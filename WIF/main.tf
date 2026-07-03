@@ -20,7 +20,7 @@ resource "google_project_iam_member" "sa_user" {
 # Artifact Registry: Permite subir imágenes Docker
 resource "google_project_iam_member" "artifactregistry_writer" {
   project = var.project_id
-  role    = "roles/artifactregistry.writer"
+  role    = "roles/artifactregistry.admin"
   member  = "serviceAccount:${google_service_account.default.email}"
 }
 
