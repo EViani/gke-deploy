@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  
+  labels:
+    app: users-api
+  name: users-api
+  namespace: default
+  
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: users-api
+  
+  template:
+    metadata:
+      labels:
+        app: users-api
+    spec:
+      containers:
+      - image: us-central1-docker.pkg.dev/sdypp-495423/k8s-apps/users-api:latest
+        imagePullPolicy: IfNotPresent
+        name: users-api
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      restartPolicy: Always

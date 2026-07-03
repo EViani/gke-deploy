@@ -1,0 +1,22 @@
+# Infraestructura de GKE con Terraform
+Este repositorio contiene los archivos necesarios para crear un cluster en GKE con Terraform
+La creación del cluster se realiza en la rama `terraform`, mientras que la rama `main` contiene el código para crear y subir la imagen Docker a Google Container Registry y desplegarla en GKE.
+Actions crean y eliminan el cluster en GKE, por lo que no es necesario tener un cluster creado para ejecutar las acciones de GitHub.
+
+- Para almacenar el state se utiliza un bucket de GCS, por lo que es necesario crear un bucket en GCP antes de ejecutar Terraform. El nombre del bucket debe ser único a nivel global, por lo que se recomienda usar un nombre que incluya el ID del proyecto y un sufijo aleatorio. Para ello ejecutamos el siguiente comando:
+~~~ bash
+cd bucket
+cp terraform.tfvars.example terraform.tfvars
+# Complete con sus datos
+# Recordar anotar el nombre del bucket creado, ya que será necesario para configurar el backend de Terraform. Dentro de la variable GPC_BUCKET_NAME, colocar el nombre del bucket creado.
+tofu init
+tofu plan
+tofu apply
+~~~
+
+Como action no elimina el bucket este debe ser creado y eliminado manualmente, para ello se puede usar el siguiente comando:
+~~~ bash
+tofu destroy
+~~~
+
+El action creara el cluster en GKE y los recursos necesarios para el despliegue de la imagen, por lo que no es necesario ejecutar `tofu apply` para crear el cluster, solo es necesario ejecutar `tofu apply` para crear el bucket de GCS. Y hacer un push en el directorio `infra` para que el action cree el cluster en GKE y los recursos necesarios para el despliegue de la imagen.

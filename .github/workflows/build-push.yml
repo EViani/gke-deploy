@@ -1,0 +1,87 @@
+name: Build Images
+
+on:
+    push:
+        branches: [main]
+        paths:
+          - "!infra/**" 
+          - "!frontend/**"
+          - "apps/**"
+
+env:
+    REGISTRY: us-central1-docker.pkg.dev
+    IMAGE_NAME: ${{secrets.GCP_PROJECT_ID}}/k8s-apps/users-api
+    # Default short=7, this env allow change the value
+    LONG_SHA: 7
+
+
+jobs:
+    build-and-push:
+        name: Build and publish Docker Image
+        runs-on: ubuntu-latest
+
+        permissions:
+          contents: read
+          packages: write
+        
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                submodules: recursive
+
+            - name: Authenticate to Google Cloud
+              id: auth
+              uses: google-github-actions/auth@v2
+              with:
+                token_format: 'access_token'
+                workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+                service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+               
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+              
+            - name: Log in Registry
+              uses: docker/login-action@v3
+              with:
+                registry: ${{env.REGISTRY}}
+                username: 'oauth2accesstoken' 
+                password: ${{ steps.auth.outputs.access_token }} 
+            
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v4
+
+            - name: Metadata Image
+              id: meta
+              uses: docker/metadata-action@v3
+              with:
+                  images: ${{env.REGISTRY}}/${{env.IMAGE_NAME}}
+                  tags: |
+                     type=raw,value=latest
+                     type=sha,format=short
+              env: 
+                DOCKER_METADA_SHORT_SHA_LENGTH: ${{env.LONG_SHA}}    
+
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v5
+              with:
+                context: ./Dockerfile
+                push: true
+                tags: ${{steps.meta.outputs.tags}}
+                labels: ${{steps.meta.outputs.labels}}
+
+            - name: Install yq
+              run: |
+                sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+                sudo chmod +x /usr/local/bin/yq
+
+            - name: Update K8s Manifiest
+              run: | 
+               yq -i '.spec.template.containers.image = "${{steps.outputs.meta.images}}:${{steps.outputs.tags.sha}}"' k8s/deployment.yml
+               git config --local user.name "Github Actions"
+               git config --local user.email "actions@github.com"
+               git add k8s/deployment
+               git commit -m "Update image to $IMAGE_NAME:${{steps.outputs.tags.sha}}" || echo "No changes to commit"
+               git pull --rebase origin main
+               git push origin main
