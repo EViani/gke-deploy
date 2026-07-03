@@ -14,3 +14,7 @@ def get_data():
 @app.update("/data")
 def update_data():
     return {"date":datetime.now().day, "data":"OK"}
+
+@app.get("/name")
+def get_name():
+    return {"name":"EViani"}
