@@ -10,3 +10,7 @@ def health():
 @app.get("/data")
 def get_data():
     return {"date":datetime.now()}
+
+@app.update("/data")
+def update_data()
+    return {"date":datetime.now().day}
