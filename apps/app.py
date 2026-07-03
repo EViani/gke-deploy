@@ -13,4 +13,4 @@ def get_data():
 
 @app.update("/data")
 def update_data():
-    return {"date":datetime.now().day}
+    return {"date":datetime.now().day, "data":"OK"}
