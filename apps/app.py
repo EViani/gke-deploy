@@ -12,5 +12,5 @@ def get_data():
     return {"date":datetime.now()}
 
 @app.update("/data")
-def update_data()
+def update_data():
     return {"date":datetime.now().day}
