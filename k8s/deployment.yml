@@ -16,7 +16,7 @@ spec:
         app: users-api
     spec:
       containers:
-        - image: us-central1-docker.pkg.dev/sdypp-495423/k8s-apps/users-api:6ad9bb4
+        - image: us-central1-docker.pkg.dev/sdypp-495423/k8s-apps/users-api:sha-956a13d
           imagePullPolicy: IfNotPresent
           name: users-api
           ports:
