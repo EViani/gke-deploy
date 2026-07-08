@@ -1,6 +1,11 @@
 # gke-deploy
 Pasos para crear un cluster en GKE con Terraform, creación y subida de imagen Docker a Google Container Registry y despliegue de la imagen en GKE.
 
+## Acciones
+- [X] Crear cluster en GKE con Terraform
+- [X] Crear imagen Docker y subirla a Google Container Registry
+- [X] Desplegar imagen en GKE con ArgoCD
+
 ## Requisitos
 - Cuenta en [Google Cloud Platform](https://cloud.google.com/)
   - Con proyecto y billing habilitado
@@ -60,10 +65,10 @@ git switch terraform
 # Comprendase el uso de terraform o tofu como el mismo comando, ya que Opentofu es un fork de Terraform.
 ~~~
 > [!IMPORTANT]
-> Para intercatuar con el GKE ejecutar el comando `gcloud container clusters get-credentials <NOMBRE_CLUSTER> --region <REGION> --project <ID_PROYECTO>` para obtener las credenciales del cluster y poder interactuar con el cluster desde la CLI de kubectl.
+> Para interactuar con GKE ejecutar el comando `gcloud container clusters get-credentials <NOMBRE_CLUSTER> --region <REGION> --project <ID_PROYECTO>` para obtener las credenciales del cluster y poder interactuar con el cluster desde la CLI de kubectl.
 
 ### [Argocd](https://argo-cd.readthedocs.io/en/stable/) 
-Para automatizar el despliegue de la imagen en GKE, se utiliza ArgosCD, para ello se debe crear un cluster en GKE y desplegar ArgosCD en el cluster. 
+Para automatizar el despliegue de la imagen en GKE, se utiliza ArgoCD, para ello se debe crear un cluster en GKE y desplegar ArgosCD en el cluster. 
 
 Instalar argocd para [CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation)
 
@@ -96,12 +101,13 @@ Nos logueamos en CLI
 ~~~ bash
 argocd login localhost:8080 --username admin --password CLAVE --insecure
 ~~~
-Podemos acceder al GUI via [http://localhost8080](http://localhost8080) o con el puerto que definimos con el user `admin` y las password anterior
+Podemos acceder al GUI via [http://localhost:8080](http://localhost:8080) o con el puerto que definimos con el user `admin` y las password anterior
 
 Via CLI agregamos el o los repositorio
 ~~~ bash
 argocd app create NAME_APP --repo REPO_URL.git --path PATH_K8 --dest-server https://kubernetes.default.svc --dest-namespace default --sync-policy automated --revision BRANCH
 ~~~
+
 ~~~ bash
 argocd app create test-gke --repo https://github.com/EViani/gke-deploy.git --path k8s/ --dest-server https://kubernetes.default.svc --dest-namespace default --sync-policy automated --revision main
 ~~~
