@@ -11,7 +11,6 @@ def health():
 def get_data():
     return {"date":datetime.now()}
 
-
 @app.get("/name")
 def get_name():
     return {"name":"EViani","repo":"gke"}
