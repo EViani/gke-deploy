@@ -25,14 +25,13 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
-      restartPolicy: Always
-      resources:
-          requests:
-            memory: "64Mi"
-            cpu: "100m"
-          limits:
-            memory: "124Mi"
-            cpu: "250m"
+        resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "124Mi"
+              cpu: "250m"
         readinessProbe:
           httpGet:
             path: /status
@@ -49,3 +48,5 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 5
           failureThreshold: 3    
+      restartPolicy: Always
+  
