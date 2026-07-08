@@ -14,15 +14,31 @@ tofu plan
 tofu apply
 ~~~
 
-Como action no elimina el bucket este debe ser creado y eliminado manualmente, para ello se puede usar el siguiente comando:
-~~~ bash
-tofu destroy
-~~~
-
-El action creara el cluster en GKE y los recursos necesarios para el despliegue de la imagen, por lo que no es necesario ejecutar `tofu apply` para crear el cluster, solo es necesario ejecutar `tofu apply` para crear el bucket de GCS. Y hacer un push en el directorio `infra` para que el action cree el cluster en GKE y los recursos necesarios para el despliegue de la imagen.
+El action creara el cluster en GKE y los recursos necesarios para el despliegue de la imagen, por lo que no es necesario ejecutar `tofu apply` para crear el cluster, solo es necesario ejecutar `tofu apply` para crear el bucket de GCS. Y hacer un push en el directorio `infra/gke` para que el action cree el cluster en GKE y los recursos necesarios para el despliegue de la imagen.
 
 No olvide los secrets necesarios:
 - `GCP_PROJECT_ID`: ID del proyecto de GCP
 - `GCP_BUCKET_ID:` Nombre del bucket de GCS creado para almacenar el state de Terraform
 - `GCP_SERVICE_ACCOUNT`: Cuenta creada con los permisos WIF
 - `GCP_WORKLOAD_IDENTITY_PROVIDER`: Nombre del proveedor de identidad de Workload Identity creado en GCP
+
+## Destroy cluster
+Para eliminar el cluster en GKE y los recursos necesarios para el despliegue de la imagen
+Con Actions
+~~~ bash
+date > destroy/date.txt
+git add destroy/date.txt
+git commit -m "Destroy cluster"
+git push 
+~~~
+Manualmente, ya que el state esta en GCS
+~~~ bash
+cd gke
+tofu destroy -auto-approve
+~~~
+
+Eliminar el bucket de GCS creado para almacenar el state de Terraform, ya que este no es eliminado por el action.
+~~~ bash
+cd bucket
+tofu destroy -auto-approve
+~~~
