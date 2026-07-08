@@ -3,8 +3,14 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+"""
+Return
+"""
 @app.get("/status")
 def health():
+    """
+    Status of app
+    """
     return {"status":"OK"}
 
 @app.get("/data")

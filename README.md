@@ -76,9 +76,14 @@ Aplicamos el manifiesto, con los flags
 ~~~ bash
 kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ~~~
-Una vez instalado forwardeamos el puerto
+Una vez instalado forwardeamos el puerto 
 ~~~ bash
+# Bloquea la terminal, para liberar el puerto debemos cerrar la terminal o presionar Ctrl+C
 kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+# Se puede ejecutar en segundo plano con el flag -d
+kubectl port-forward svc/argocd-server -n argocd 8080:443 -d
+
 ~~~
 #### Acceder a Argocd
 Obtenemos el password
@@ -97,3 +102,7 @@ Via CLI agregamos el o los repositorio
 ~~~ bash
 argocd app create NAME_APP --repo REPO_URL.git --path PATH_K8 --dest-server https://kubernetes.default.svc --dest-namespace default --sync-policy automated --revision BRANCH
 ~~~
+~~~ bash
+argocd app create test-gke --repo https://github.com/EViani/gke-deploy.git --path k8s/ --dest-server https://kubernetes.default.svc --dest-namespace default --sync-policy automated --revision main
+~~~
+
