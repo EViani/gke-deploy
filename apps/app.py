@@ -18,3 +18,7 @@ def update_data():
 @app.get("/name")
 def get_name():
     return {"name":"EViani","repo":"gke"}
+
+@app.get("/app")
+def get_app():
+    return {"app_name":"GKE_DEPLOY"}

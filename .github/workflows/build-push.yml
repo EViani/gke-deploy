@@ -80,11 +80,10 @@ jobs:
 
             - name: Update K8s Manifiest
               run: | 
-               SHA_TAG="${{steps.meta.outputs.version}}" 
-               yq -i '.spec.template.containers[0].image = \"${{steps.meta.outputs.images}}:${{steps.vars.outputs.TAG}}"' k8s/deployment.yml
+               yq -i '.spec.template.containers[0].image = "${{env.REGISTRY}}/${{env.IMAGE_NAME}}:${{steps.vars.outputs.TAG}}"' k8s/deployment.yml
                git config --local user.name "Github Actions"
                git config --local user.email "actions@github.com"
                git add k8s/deployment
-               git commit -m "Update image to $IMAGE_NAME:${{steps.vars.outputs.TAG}}" || echo "No changes to commit"
+               git commit -m "Update image to ${{env.IMAGE_NAME}}:${{steps.vars.outputs.TAG}}" || echo "No changes to commit"
                git pull --rebase origin main
                git push origin main
