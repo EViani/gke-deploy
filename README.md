@@ -5,6 +5,16 @@ Pasos para crear un cluster en GKE con Terraform, creación y subida de imagen D
 - [X] Crear cluster en GKE con Terraform
 - [X] Crear imagen Docker y subirla a Google Container Registry
 - [X] Desplegar imagen en GKE con ArgoCD
+- [ ] App con frontend y backend
+  - [ ] Ingress | Gateway
+  - [ ] Certificado SSL
+- [ ] Infra
+  - [ ] RabbitMQ
+    - [ ] Escalado por RabbitMQ
+  - [ ] Redis
+- [ ] Observavilidad
+  - [ ] Prometheus
+  - [ ] Grafana
 
 ## Requisitos
 - Cuenta en [Google Cloud Platform](https://cloud.google.com/)
