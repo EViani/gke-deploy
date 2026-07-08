@@ -26,7 +26,7 @@ resource "google_container_cluster" "primary" {
   remove_default_node_pool = true
   initial_node_count       = 1
   deletion_protection      = false
-  depends_on = [google_project_service.container]
+  depends_on               = [google_project_service.container]
 }
 
 
@@ -45,6 +45,6 @@ resource "google_container_node_pool" "app_nodes" {
       "https://www.googleapis.com/auth/monitoring",
       "https://www.googleapis.com/auth/devstorage.read_only",
     ]
-  
+
   }
 }

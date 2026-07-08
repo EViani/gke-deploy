@@ -2,6 +2,7 @@ name: 'Terraform GKE Deployment'
 
 on:
   push:
+    
     branches:
       - terraform
     paths:
@@ -13,7 +14,8 @@ on:
     paths:
       - 'infra/gke/**'
       - '!infra/destroy/**'
-
+  workflow_dispatch:
+    
 permissions:
   contents: read
   id-token: write
